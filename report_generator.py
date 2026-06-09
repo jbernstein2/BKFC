@@ -4,7 +4,9 @@ from pptx import Presentation
 from pptx.util import Inches, Pt
 from pptx.enum.text import PP_ALIGN
 from pptx.enum.shapes import MSO_SHAPE
+
 from branding import COLORS, get_rgb
+from data_parser import STATS
 from insights import generate_insights
 
 def safe_float(val):
