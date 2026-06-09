@@ -29,7 +29,7 @@ def generate_chart_stream(values, labels, colors, title):
     ax.set_facecolor('#' + COLORS["WHITE"])
     
     bars = ax.bar(labels, values, color=colors, width=0.5, edgecolor=None)
-    ax.set_title(title.toUpperCase(), fontsize=11, fontweight='bold', pad=15, color='#' + COLORS["BLACK"])
+    ax.set_title(title.upper(), fontsize=11, fontweight='bold', pad=15, color='#' + COLORS["BLACK"])
     
     # Clean, minimalist presentation axes
     ax.spines['top'].set_visible(False)
