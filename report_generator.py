@@ -156,7 +156,7 @@ def add_summary_slide(prs, data):
     table_shape = slide.shapes.add_table(rows=7, cols=3, left=Inches(1.66), top=Inches(1.8), width=Inches(10), height=Inches(4.5))
     table = table_shape.table
 
-    headers = ["KEY METRIC PERFORMANCE", "BROOKLYN FC", data['opponent_name'].toUpperCase()]
+    headers = ["KEY METRIC PERFORMANCE", "BROOKLYN FC", data['opponent_name'].upper()]
     for col_idx, text in enumerate(headers):
         cell = table.cell(0, col_idx)
         cell.text = text
