@@ -313,7 +313,7 @@ def add_stat_slide(prs, data, label, col):
         safe_float(data["all_opp_avg"][col]),
         opp_season_val
     ]
-    season_labels = ["BKFC Baseline", "Opponent Average", f"{data['opponent_name']} Baseline"]
+    season_labels = ["BKFC Baseline", "Opponent Avg", f"{data['opponent_name']} Baseline"]
     season_chart_stream = generate_chart_stream(season_vals, season_labels, season_colors, "Historical Performance Context")
 
     # Injecting Data Streams onto Presentation Canvas Maps
