@@ -63,7 +63,7 @@ if bkfc_file and opp_file:
                 output_file = "BKFC_Match_Report.pptx"
 
                 with st.spinner("Generating PowerPoint..."):
-                    generate_report(data, output_file)
+                    generate_report(data)
 
                 with open(output_file, "rb") as f:
                     st.download_button(
