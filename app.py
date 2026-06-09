@@ -1,74 +1,63 @@
 import streamlit as st
-
-from data_parser import load_match_data, get_match_list
+from data_parser import load_match_data
 from report_generator import generate_report
 
 st.set_page_config(
-    page_title="BKFC Match Report Generator",
+    page_title="BKFC Technical Match Intelligence",
+    page_icon="⚽",
     layout="wide"
 )
 
-st.title("⚽ Brooklyn FC Match Report Generator")
+# Application Theme Framework Title Elements
+st.title("⚽ Brooklyn FC")
+st.subheader("Automated Match Analysis & Scouting Report Generator")
+st.markdown("---")
 
-st.markdown("Upload BKFC + Opponent season files to generate a match report.")
+col1, col2 = st.columns(2)
 
-# ── Uploads ─────────────────────────────
-bkfc_file = st.file_uploader("Upload BKFC Season File", type=["xlsx"])
-opp_file = st.file_uploader("Upload Opponent Season File", type=["xlsx"])
+with col1:
+    st.markdown("### 📥 Primary Data Inputs")
+    bkfc_file = st.file_uploader("Upload BKFC Wyscout Season Database (.xlsx)", type=["xlsx"])
 
-data = None
+with col2:
+    st.markdown("### 📥 Opponent Data Inputs")
+    opp_file = st.file_uploader("Upload Opponent Wyscout Season Database (.xlsx)", type=["xlsx"])
 
-# Both files must be uploaded before processing begins
 if bkfc_file and opp_file:
     try:
-        # Extract available matches from the BKFC tracking file
-        match_options = get_match_list(bkfc_file)
+        # Load and execute transformation mapping engine pipeline
+        data = load_match_data(bkfc_file, opp_file)
         
-        if match_options:
-            # Dynamically default the selection index to the newest match (bottom of the sheet)
-            latest_match_idx = len(match_options) - 1
+        st.success(f"Successfully Parsed Match Record: BKFC vs {data['opponent_name']}")
+        
+        # Display contextual parameters validation card
+        with st.container():
+            st.markdown("#### Match Metadata Validation Profiles")
+            meta1, meta2, meta3 = st.columns(3)
+            meta1.metric("Competition Stage", data['competition'])
+            meta2.metric("Recorded Match Date", data['match_date'])
+            meta3.metric("Final Scoreline", data['score'])
             
-            selected_match = st.selectbox(
-                "Select Match to Generate Report For",
-                options=match_options,
-                index=latest_match_idx,
-                format_func=lambda x: x["label"]
-            )
-            
-            # Load your data dynamically based on the match picked
-            data = load_match_data(bkfc_file, opp_file, match_row_idx=selected_match["index"])
-        else:
-            # Fallback configuration if matches aren't successfully parsed
-            data = load_match_data(bkfc_file, opp_file)
-            
-    except Exception as e:
-        st.error(f"Failed to automatically process spreadsheet structure: {e}")
-        data = None
-
-    if data:
-        st.success(
-            f"Detected Match: BKFC vs {data['opponent_name']}"
-        )
-
-        st.write("**Match Info**")
-        st.write(f"Date: {data['match_date']}")
-        st.write(f"Competition: {data['competition']}")
-        st.write(f"Score: {data['score']}")
-
-        confirm = st.checkbox("I confirm this match is correct")
+        st.markdown("---")
+        confirm = st.checkbox("Verify parsed pipeline metadata profiles match targeted fixture parameters")
 
         if confirm:
-            if st.button("Generate Report"):
-
-                output_file = "BKFC_Match_Report.pptx"
-
-                with st.spinner("Generating PowerPoint..."):
-                    generate_report(data)
-
-                with open(output_file, "rb") as f:
-                    st.download_button(
-                        "Download PowerPoint",
-                        f,
-                        file_name=output_file,
-                        mime="application/vnd.openxmlformats-officedocument.presentationml.presentation"
-                    )
+            if st.button("Compile Automated Match Analytics Report Deck", use_container_width=True):
+                with st.spinner("Processing deep metric visualizations..."):
+                    # Process presentation array objects into bytes stream
+                    report_stream = generate_report(data)
+                    
+                    # Create custom file name download output string matches
+                    clean_opp_name = data['opponent_name'].replace(" ", "_")
+                    output_filename = f"BKFC_vs_{clean_opp_name}_Match_Report.pptx"
+                    
+                st.balloons()
+                st.download_button(
+                    label="💾 Download PowerPoint Match Analysis Deck",
+                    data=report_stream,
+                    file_name=output_filename,
+                    mime="application/vnd.openxmlformats-officedocument.presentationml.presentation",
+                    use_container_width=True
+                )
+    except Exception as e:
+        st.error(f"Critical pipeline error encountered during execution loop processing: {str(e)}")
