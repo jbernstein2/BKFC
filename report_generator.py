@@ -44,7 +44,7 @@ def generate_chart_stream(values, labels, colors, title):
     # Inline text labels placed above bars to echo professional scouting reports
     for bar in bars:
         height = bar.get_height()
-        ax.annotate(f'{height:.1f}',
+        ax.annotate(f'{height:.2f}',
                     xy=(bar.get_x() + bar.get_width() / 2, height),
                     xytext=(0, 4),  
                     textcoords="offset points",
