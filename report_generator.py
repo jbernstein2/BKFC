@@ -116,7 +116,7 @@ def add_title_slide(prs, data):
     tf_meta = meta_box.text_frame
     
     p3 = tf_meta.paragraphs[0]
-    p3.text = f"BKFC vs {data['opponent_name'].toUpperCase()}"
+    p3.text = f"BKFC vs {data['opponent_name'].upper()}"
     p3.font.size = Pt(22)
     p3.font.bold = True
     p3.font.color.rgb = get_rgb(COLORS["WHITE"])
@@ -266,7 +266,7 @@ def add_stat_slide(prs, data, label, col):
 
     title_box = slide.shapes.add_textbox(Inches(0.4), Inches(0.1), Inches(12.5), Inches(0.5))
     p = title_box.text_frame.paragraphs[0]
-    p.text = label.toUpperCase()
+    p.text = label.upper()
     p.font.size = Pt(18)
     p.font.bold = True
     p.font.color.rgb = get_rgb(COLORS["GOLD"])
